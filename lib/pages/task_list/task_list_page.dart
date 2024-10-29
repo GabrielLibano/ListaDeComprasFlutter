@@ -56,6 +56,9 @@ class _TaskListPageState extends State<TaskListPage> {
                       return Dismissible(
                         key: Key(taskProvider.tasks[index].id),
                         background: DeleteTask(),
+                        onDismissed: (direction){
+                          taskProvider.deleteTask(task.id);
+                        },
                         child: TaskWidget(
                           task: task,
                           color:
