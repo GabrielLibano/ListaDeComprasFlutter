@@ -3,20 +3,20 @@ import 'package:todo_app/models/task_group.dart';
 import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/repository/supabase_repository.dart';
 
-class TaskProvider extends ChangeNotifier {
-  final _repo = SupabaseRepository();
+class TaskProvider with ChangeNotifier {
+  final SupabaseRepository _repo = SupabaseRepository();
 
-  List<Task> _task = [];
-  List<Task> get task => _task;
+  List<Task> _tasks = [];
+  List<Task> get tasks => _tasks;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  Future<void> listTaskByGroups(String groupId) async {
+  Future<void> listTasksByGroup(String groupId) async {
     _isLoading = true;
     notifyListeners();
     try {
-      _task = await _repo.listTaskByGroups(groupId);
+      _tasks = await _repo.listTasksByGroup(groupId);
     } catch (e) {
       print(e);
     } finally {
