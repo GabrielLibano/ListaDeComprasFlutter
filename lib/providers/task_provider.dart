@@ -24,4 +24,15 @@ class TaskProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> createTask(Task task) async {
+    try {
+      await _repo.createTask(task);
+      //_tasks = await _repo.listTasksByGroup(task.groupId);
+      _tasks.add(task);
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
 }

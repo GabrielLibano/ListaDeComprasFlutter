@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:todo_app/models/task_model.dart';
+import 'package:todo_app/providers/task_provider.dart';
 
 class TaskCreatePage extends StatefulWidget {
   const TaskCreatePage({super.key, required this.groupId, this.task});
@@ -31,14 +33,17 @@ class _TaskCreatePageState extends State<TaskCreatePage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(18.0),
-          child: Column(
-            children: [
-              _buildTitle(),
-              const SizedBox(height: 20),
-              _buildSubtitle(),
-              const SizedBox(height: 20),
-              _buildDatePicker(),
-            ],
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                _buildTitle(),
+                const SizedBox(height: 20),
+                _buildSubtitle(),
+                const SizedBox(height: 20),
+                _buildDatePicker(),
+              ],
+            ),
           ),
         ),
       ),
@@ -54,7 +59,7 @@ class _TaskCreatePageState extends State<TaskCreatePage> {
     );
   }
 
-    TextFormField _buildTitle() {
+  TextFormField _buildTitle() {
     return TextFormField(
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -142,5 +147,19 @@ class _TaskCreatePageState extends State<TaskCreatePage> {
     );
   }
 
-  Future<void> _submitForm() async {}
+  Future<void> _submitForm() async {
+    bool isValid = _formKey.currentState!.validate();
+    if (isValid) {
+      final title = titleController.text;
+      final subtitle = subtitleController.text;
+      final task = Task.create(
+          title: title,
+          subtitle: subtitle,
+          date: date,
+          groupId: widget.groupId);
+
+      await context.read<TaskProvider>().createTask(task);
+      Navigator.pop(context);
+    }
+  }
 }
