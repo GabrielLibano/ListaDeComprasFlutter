@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/pages/task_create/task_create_page.dart';
+import 'package:todo_app/pages/task_list/widgets/delete_task.dart';
 import 'package:todo_app/pages/task_list/widgets/task_widget.dart';
 import 'package:todo_app/providers/task_group_provider.dart';
 import 'package:todo_app/providers/task_provider.dart';
@@ -52,10 +53,14 @@ class _TaskListPageState extends State<TaskListPage> {
                     itemCount: taskProvider.tasks.length,
                     itemBuilder: (context, index) {
                       final task = taskProvider.tasks[index];
-                      return TaskWidget(
-                        task: task,
-                        color:
-                            Color(taskGroupProvider.selectedTaskGroup!.color),
+                      return Dismissible(
+                        key: Key(taskProvider.tasks[index].id),
+                        background: DeleteTask(),
+                        child: TaskWidget(
+                          task: task,
+                          color:
+                              Color(taskGroupProvider.selectedTaskGroup!.color),
+                        ),
                       );
                     })),
           ],

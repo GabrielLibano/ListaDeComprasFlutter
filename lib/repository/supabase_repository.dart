@@ -47,4 +47,9 @@ class SupabaseRepository {
     final supabase = Supabase.instance.client;
     await supabase.from('tasks').insert(task.toMap());
   }
+
+  Future<void> deleteTask(String taskId) async {
+    final supabase = Supabase.instance.client;
+    await supabase.from('tasks').delete().eq('id', taskId);
+  }
 }
